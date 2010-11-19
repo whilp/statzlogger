@@ -27,6 +27,8 @@ class StatzHandler(logging.Handler):
         indices = list(getattr(record, "indices", []))
         if index is not None:
             indices.append(index)
+        if not indices:
+            indices = [None]
 
         return indices
 
