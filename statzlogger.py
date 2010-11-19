@@ -58,8 +58,8 @@ class Sum(StatzHandler):
 
 class Collection(Sum):
 
-    def __init__(self, level=logging.NOTSET, default=[]):
-        Sum.__init__(self, level=level, default=default)
+    def __init__(self, level=logging.NOTSET, default=[], op=operator.add):
+        Sum.__init__(self, level=level, default=default, op=op)
 
     def getvalue(self, record):
         return [Sum.getvalue(self, record)]
