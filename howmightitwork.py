@@ -45,7 +45,7 @@ fileoffans.debug(("britney", "a britney song"),
 
 now = time.time()
 hour = now - (now % 3600)
-salesperhour.debug({"count": 1, "sales": 11.99}, 
-        extra=dict(indexes=("britney", "John Q. Salesguy", hour)))
+#salesperhour.debug({"count": 1, "sales": 11.99}, 
+#        extra=dict(indexes=("britney", "John Q. Salesguy", hour)))
 
 top100songs.debug("a song", extra=dict(weight=1))
