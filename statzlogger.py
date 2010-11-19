@@ -19,10 +19,9 @@ class StatzHandler(logging.Handler):
     def getindices(self, record):
         """Return a list of indices for a given record.
 
-        The list of indices will either contain the record's *index*
-        attribute or a list generated from its iterable *indices*
-        attribute. If both attributes are present, *index* will be
-        added to *indices*.
+        The list of indices will either contain the record's *index* attribute
+        or a list generated from its iterable *indices* attribute. If both
+        attributes are present, *index* will be added to *indices*.
         """
         index = getattr(record, "index", None)
         indices = list(getattr(record, "indices", []))
