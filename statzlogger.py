@@ -16,11 +16,14 @@ class StatzHandler(logging.Handler):
         logging.Handler.__init__(self, level)
         self.indices = {}
 
-    def emit(self, record):
+    def getindices(self, record):
         indices = getattr(record, "indices", [])
         indices.append(getattr(record, "index", None))
 
-        for index in indices:
+        return indices
+
+    def emit(self, record):
+        for index in self.getindices(record):
             value = record.msg
             if isinstance(value, type({})):
                 self.emitdictlike(value, index)
