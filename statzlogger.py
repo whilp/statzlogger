@@ -47,12 +47,13 @@ class StatzHandler(logging.Handler):
 
 class Sum(StatzHandler):
 
-    def __init__(self, level=logging.NOTSET, default=0):
+    def __init__(self, level=logging.NOTSET, default=0, op=operator.add):
         StatzHandler.__init__(self, level=level)
         self.default = default
+        self.op = op
 
     def emitvalue(self, value, index):
-        value = self.indices.setdefault(index, self.default) + value
+        value = self.op(self.indices.setdefault(index, self.default), value)
         StatzHandler.emitvalue(self, value, index)
 
 class Collection(Sum):
