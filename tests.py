@@ -167,5 +167,43 @@ class MinimumTests(unittest.TestCase):
         self.assertEqual(len(obj.indices["index"]), 2)
         self.assertEqual(obj.indices["index"][0], ("value1", 1))
 
+class SetTests(unittest.TestCase):
+
+    def cls(self):
+        from statzlogger import Set as cls
+        return cls
+    
+    def init(self, *args, **kwargs):
+        return self.cls()(*args, **kwargs)
+    
+    def test_getvalue(self):
+        obj = self.init()
+        record = FakeRecord("value")
+        value = obj.getvalue(record)
+        self.assertEqual(value, set(["value"]))
+
+    def test_getvalue_seq(self):
+        obj = self.init()
+        record = FakeRecord(["one", "two"])
+        value = obj.getvalue(record)
+        self.assertEqual(value, set(("one", "two")))
+
+    def test_emitvalue(self):
+        obj = self.init()
+        obj.emitvalue(["value"], "index")
+        self.assertEqual(obj.indices["index"], set(["value"]))
+
+        obj.emitvalue(["value"], "index")
+        self.assertEqual(obj.indices["index"], set(["value"]))
+
+    def test_emitvalue_size(self):
+        obj = self.init(size=1)
+        obj.emitvalue(["value"], "index")
+        self.assertEqual(obj.indices["index"], set(["value"]))
+
+        obj.emitvalue(["value"], "index")
+        self.assertTrue(len(obj.indices), 0)
+
+
 if __name__ == "__main__":
     unittest.main()

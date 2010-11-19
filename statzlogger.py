@@ -1,5 +1,6 @@
 import logging
 import operator
+import types
 
 try:
     NullHandler = logging.NullHandler
@@ -89,6 +90,23 @@ class Minimum(Maximum):
 
     def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=False):
         Maximum.__init__(self, level=level, size=size, weight=weight, reverse=reverse)
+
+class Set(Collection):
+
+    def __init__(self, level=logging.NOTSET, default=set(), size=None, op=set.union):
+        Collection.__init__(self, level=level, default=default, op=op)
+        self.size = size
+
+    def getvalue(self, record):
+        value = Sum.getvalue(self, record)
+        if isinstance(value, types.StringTypes):
+            value = [value]
+        return set(value)
+    
+    def emitvalue(self, value, index):
+        Collection.emitvalue(self, value, index)
+        if self.size is not None and len(self.indices[index]) > self.size:
+            del(self.indices[index])
 
 class Top(StatzHandler):
     pass
