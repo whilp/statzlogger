@@ -12,14 +12,14 @@ log.addHandler(NullHandler())
 
 class StatzHandler(logging.Handler):
 
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self, level)
+        self.indices = {}
+
     def emit(self, record):
         pass
 
 class Collection(StatzHandler):
-
-    def __init__(self, level=logging.NOTSET):
-        StatzHandler.__init__(self, level)
-        self.indices = {}
 
     def emit(self, record):
         indices = getattr(record, "indices", [])
