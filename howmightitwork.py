@@ -6,6 +6,12 @@ try:
 except ImportError:
     szl = None
 
+stream = logging.StreamHandler()
+szllog = logging.getLogger("statzlogger")
+szllog.setLevel(logging.DEBUG)
+stream.setFormatter(logging.Formatter())
+szllog.addHandler(stream)
+
 # Implementations of szl concepts found in section 'Actions 1: The
 # emit statement':
 #
