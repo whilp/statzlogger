@@ -19,6 +19,9 @@ szllog.addHandler(stream)
 #
 # These calls should not fail if statzlogger can't be found.
 
+stats = logging.getLogger("stats")
+stats.setLevel(logging.DEBUG)
+
 numdivafans = logging.getLogger("stats.numdivafans")
 sales = logging.getLogger("stats.sales")
 fileoffans = logging.getLogger("stats.fileoffans")
