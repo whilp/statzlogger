@@ -31,6 +31,14 @@ class StatzHandler(logging.Handler):
 
         return indices
 
+    def getvalues(self, record):
+        msg = record.msg
+        values = {}
+
+        if instance(msg, type({})):
+            for k, v in msg.items():
+                yield k, v
+
     def emit(self, record):
         for index in self.getindices(record):
             value = record.msg
@@ -50,12 +58,12 @@ class StatzHandler(logging.Handler):
 
 class Collection(StatzHandler):
 
-    def emit(self, record):
-        indices = getattr(record, "indices", [])
-        indices.append(getattr(record, "index", None))
+    def emitsimple(self, value, index):
+        self.indices.setdefault(index, []).append(value)
 
-        for index in indices:
-            self.indices.setdefault(index, []).append(record)
+    def emit(self, record):
+        for index in self.getindices(record):
+            self.emitsimple()
 
 class Sum(StatzHandler):
 

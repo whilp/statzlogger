@@ -35,6 +35,15 @@ class StatzHandlerTests(unittest.TestCase):
         indices = obj.getindices(record)
         self.assertEqual(indices, ["index1", "index2"])
 
+    def test_getindices_both(self):
+        obj = self.init()
+        record = self.record("foo", extra=dict(
+            index="index",
+            indices=("index1", "index2"),
+        ))
+        indices = obj.getindices(record)
+        self.assertEqual(indices, ["index1", "index2", "index"])
+
 class CollectionTests(unittest.TestCase):
 
     def cls(self):
