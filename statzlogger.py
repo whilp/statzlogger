@@ -38,19 +38,22 @@ class StatzHandler(logging.Handler):
     def emitvalue(self, record, index):
         raise NotImplementedError()
 
-class Collection(StatzHandler):
-
-    def emitvalue(self, value, index):
-        self.indices.setdefault(index, []).append(value)
-
 class Sum(StatzHandler):
 
-    def __init__(self, level=logging.NOTSET, start=0):
+    def __init__(self, level=logging.NOTSET, default=0):
         StatzHandler.__init__(self, level)
-        self.start = start
+        self.default = default
 
     def emitvalue(self, value, index):
-        self.indices[index] = self.indices.setdefault(index, 0) + value
+        self.indices[index] = self.indices.setdefault(index, self.default) + value
+
+class Collection(Sum):
+
+    def __init__(self, level=logging.NOTSET, default=[]):
+        Sum.__init__(self, level, default=default)
+
+    def emitvalue(self, value, index):
+        Sum.emitvalue(self, value, index, [value])
 
 class Top(StatzHandler):
     pass
