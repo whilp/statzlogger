@@ -56,7 +56,7 @@ class Collection(Sum):
         Sum.__init__(self, level, default=default)
 
     def emitvalue(self, value, index):
-        Sum.emitvalue(self, value, index, [value])
+        Sum.emitvalue(self, [value], index)
 
 class Top(StatzHandler):
     pass

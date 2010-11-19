@@ -80,5 +80,13 @@ class CollectionTests(unittest.TestCase):
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
 
+    def test_emitvalue(self):
+        obj = self.init()
+        obj.emitvalue(1, "index")
+        self.assertEqual(obj.indices, {"index": [1]})
+
+        obj.emitvalue(1, "index")
+        self.assertEqual(obj.indices, {"index": [1, 1]})
+
 if __name__ == "__main__":
     unittest.main()
