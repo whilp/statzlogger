@@ -98,10 +98,11 @@ class Set(Collection):
         self.size = size
 
     def getvalue(self, record):
-        value = Sum.getvalue(self, record)
-        if isinstance(value, types.StringTypes):
-            value = [value]
-        return set(value)
+        value = Collection.getvalue(self, record)
+        try:
+            return set(value)
+        except TypeError:
+            return set(*value)
     
     def emitvalue(self, value, index):
         Collection.emitvalue(self, value, index)
