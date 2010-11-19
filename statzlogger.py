@@ -38,8 +38,8 @@ class StatzHandler(logging.Handler):
             value = record.msg
             self.emitvalue(value, index)
 
-    def emitvalue(self, record, index):
-        raise NotImplementedError()
+    def emitvalue(self, value, index):
+        self.indices[index] = value
 
 class Sum(StatzHandler):
 
