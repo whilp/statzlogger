@@ -18,7 +18,7 @@ class StatzHandler(logging.Handler):
 class Collection(StatzHandler):
 
     def __init__(self, level=logging.NOTSET):
-        logging.Handler.__init__(self, level)
+        StatzHandler.__init__(self, level)
         self.indices = {}
 
     def emit(self, record):
