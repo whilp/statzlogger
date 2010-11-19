@@ -19,13 +19,22 @@ class StatzHandlerTests(unittest.TestCase):
     def record(self, *args, **kwargs):
         return FakeRecord(*args, **kwargs)
     
-    def test_getindices(self):
+    def test_getindices_index(self):
         obj = self.init()
         record = self.record("foo", extra=dict(
             index="index",
         ))
         indices = obj.getindices(record)
         self.assertEqual(indices, ["index"])
+
+    def test_getindices_indices_tuple(self):
+        obj = self.init()
+        record = self.record("foo", extra=dict(
+            indices=("index1", "index2"),
+        ))
+        indices = obj.getindices(record)
+        self.assertEqual(indices, ["index1", "index2"])
+
 
 class CollectionTests(unittest.TestCase):
 
