@@ -14,7 +14,7 @@ log.addHandler(NullHandler())
 class StatzHandler(logging.Handler):
 
     def __init__(self, level=logging.NOTSET):
-        logging.Handler.__init__(self, level)
+        logging.Handler.__init__(self, level=level)
         self.indices = {}
 
     def getindices(self, record):
@@ -48,7 +48,7 @@ class StatzHandler(logging.Handler):
 class Sum(StatzHandler):
 
     def __init__(self, level=logging.NOTSET, default=0):
-        StatzHandler.__init__(self, level)
+        StatzHandler.__init__(self, level=level)
         self.default = default
 
     def emitvalue(self, value, index):
@@ -58,7 +58,7 @@ class Sum(StatzHandler):
 class Collection(Sum):
 
     def __init__(self, level=logging.NOTSET, default=[]):
-        Sum.__init__(self, level, default=default)
+        Sum.__init__(self, level=level, default=default)
 
     def getvalue(self, record):
         return [Sum.getvalue(self, record)]
@@ -66,7 +66,7 @@ class Collection(Sum):
 class Maximum(Collection):
 
     def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=True):
-        Collection.__init__(self, level, default=[])
+        Collection.__init__(self, level=level, default=[])
         self.size = size
         self.weight = weight
         self.reverse = reverse
