@@ -114,6 +114,6 @@ below for more information.
 API
 ---
 
-..automodule:: statzlogger
+.. automodule:: statzlogger
     :members:
     :show-inheritance:
