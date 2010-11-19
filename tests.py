@@ -47,11 +47,23 @@ class StatzHandlerTests(unittest.TestCase):
         indices = obj.getindices(record)
         self.assertEqual(indices, [None])
 
-    def test_getvalue(self):
+    def test_getvalue_str(self):
         obj = self.init()
         record = FakeRecord("value")
         value = obj.getvalue(record)
-        self.assertEqual(record.msg, value)
+        self.assertEqual(value, "value")
+
+    def test_getvalue_int(self):
+        obj = self.init()
+        record = FakeRecord(1)
+        value = obj.getvalue(record)
+        self.assertEqual(value, 1)
+
+    def test_getvalue_seq(self):
+        obj = self.init()
+        record = FakeRecord((1,2,3))
+        value = obj.getvalue(record)
+        self.assertEqual(value, (1,2,3))
 
     def test_emitvalue(self):
         obj = self.init()
@@ -95,11 +107,23 @@ class CollectionTests(unittest.TestCase):
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
 
-    def test_getvalue(self):
+    def test_getvalue_str(self):
+        obj = self.init()
+        record = FakeRecord("value")
+        value = obj.getvalue(record)
+        self.assertEqual(value, ["value"])
+
+    def test_getvalue_int(self):
         obj = self.init()
         record = FakeRecord(1)
         value = obj.getvalue(record)
         self.assertEqual(value, [1])
+
+    def test_getvalue_seq(self):
+        obj = self.init()
+        record = FakeRecord((1,2,3))
+        value = obj.getvalue(record)
+        self.assertEqual(value, [(1,2,3)])
 
     def test_emitvalue(self):
         obj = self.init()
@@ -118,11 +142,23 @@ class MaximumTests(unittest.TestCase):
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
 
-    def test_getvalue(self):
+    def test_getvalue_str(self):
         obj = self.init()
         record = FakeRecord("value")
         value = obj.getvalue(record)
         self.assertEqual(value, [("value", 1)])
+
+    def test_getvalue_int(self):
+        obj = self.init()
+        record = FakeRecord(1)
+        value = obj.getvalue(record)
+        self.assertEqual(value, [(1, 1)])
+
+    def test_getvalue_seq(self):
+        obj = self.init()
+        record = FakeRecord((1,2,3))
+        value = obj.getvalue(record)
+        self.assertEqual(value, [((1,2,3), 1)])
 
     def test_getvalue_weighted(self):
         obj = self.init()
@@ -176,11 +212,17 @@ class SetTests(unittest.TestCase):
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
     
-    def test_getvalue(self):
+    def test_getvalue_str(self):
         obj = self.init()
         record = FakeRecord("value")
         value = obj.getvalue(record)
         self.assertEqual(value, set(["value"]))
+    
+    def test_getvalue_int(self):
+        obj = self.init()
+        record = FakeRecord(1)
+        value = obj.getvalue(record)
+        self.assertEqual(value, set([1]))
 
     def test_getvalue_seq(self):
         obj = self.init()
