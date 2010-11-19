@@ -88,10 +88,12 @@ instances::
     import stacklogger as szl
 
     reqs = logging.getLogger("stats.requests")
-    reqs.addHandler(sql.Collection)
+    reqs.addHandler(sql.Collection())
 
-Then, as your application runs, log messages on the *reqs* logger each time you
-serve a request for a URL::
+Note: it's a good idea cluster all of your :mod:`statzlogger` loggers in a
+single namespace. Then, you can control their output via a single instance,
+turning them on or off as necessary. To track stuff, log messages on the *reqs*
+logger each time your application serves a request for a URL::
 
     now = time.time()
     hour = now - (now % 3600)
