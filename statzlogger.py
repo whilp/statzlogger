@@ -29,7 +29,18 @@ class Collection(StatzHandler):
             self.indices.setdefault(index, []).append(record)
 
 class Sum(StatzHandler):
-    pass
+
+    def __init__(self, level=logging.NOTSET, start=0):
+        StatzHandler.__init__(self, level)
+        self.start = start
+
+    def emit(self, record):
+        indices = getattr(record, "indices", [])
+        indices.append(getattr(record, "index", None))
+
+        for index in indices:
+            value = record.msg
+            self.indices[index] = self.indices.setdefault(index, 0) + value
 
 class Top(StatzHandler):
     pass
