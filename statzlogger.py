@@ -1,6 +1,5 @@
 import logging
 import operator
-import types
 
 try:
     NullHandler = logging.NullHandler
