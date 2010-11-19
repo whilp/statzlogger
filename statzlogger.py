@@ -7,7 +7,8 @@ except AttributeError:
         def emit(self, record):
             pass
 
-logging.getLogger().addHandler(NullHandler())
+log = logging.getLogger("statzlogger")
+log.addHandler(NullHandler())
 
 class StatsLogger(logging.Logger):
     """A statistics logger.
