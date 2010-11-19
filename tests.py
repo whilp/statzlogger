@@ -15,13 +15,10 @@ class StatzHandlerTests(unittest.TestCase):
     
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
-    
-    def record(self, *args, **kwargs):
-        return FakeRecord(*args, **kwargs)
-    
+
     def test_getindices_index(self):
         obj = self.init()
-        record = self.record("foo", extra=dict(
+        record = FakeRecord("foo", extra=dict(
             index="index",
         ))
         indices = obj.getindices(record)
@@ -29,7 +26,7 @@ class StatzHandlerTests(unittest.TestCase):
 
     def test_getindices_indices_tuple(self):
         obj = self.init()
-        record = self.record("foo", extra=dict(
+        record = FakeRecord("foo", extra=dict(
             indices=("index1", "index2"),
         ))
         indices = obj.getindices(record)
@@ -37,7 +34,7 @@ class StatzHandlerTests(unittest.TestCase):
 
     def test_getindices_both(self):
         obj = self.init()
-        record = self.record("foo", extra=dict(
+        record = FakeRecord("foo", extra=dict(
             index="index",
             indices=("index1", "index2"),
         ))
