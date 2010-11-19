@@ -21,7 +21,8 @@ class StatzHandler(logging.Handler):
 
         The list of indices will either contain the record's *index* attribute
         or a list generated from its iterable *indices* attribute. If both
-        attributes are present, *index* will be added to *indices*.
+        attributes are present, *index* will be added to *indices*. If no
+        indices are defined, the resulting list will be [None].
         """
         index = getattr(record, "index", None)
         indices = list(getattr(record, "indices", []))
