@@ -44,6 +44,15 @@ class StatzHandlerTests(unittest.TestCase):
         indices = obj.getindices(record)
         self.assertEqual(indices, ["index1", "index2", "index"])
 
+class SumTests(unittest.TestCase):
+
+    def cls(self):
+        from statzlogger import Sum as cls
+        return cls
+    
+    def init(self, *args, **kwargs):
+        return self.cls()(*args, **kwargs)
+
 class CollectionTests(unittest.TestCase):
 
     def cls(self):
