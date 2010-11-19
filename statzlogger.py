@@ -29,3 +29,51 @@ class StatsLogger(logging.Logger):
         text: An unindexed collection written directly to a plain file.
         mrcounter: An integer counter that can be used to provide an accumulated count (e.g. a progress indicator) to a C++ program invoking the Sawzall interpreter.
     """
+
+    def log(self, level, msg, *args, **kwargs):
+        pass
+
+class CollectionLogger(logging.Logger):
+
+    def makeRecord(self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None):
+        rv = LogRecord()
+        return rv
+
+class CollectionHandler(logging.Handler):
+
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self, level)
+        self.collections = {}
+    
+    def emit(self, record):
+        for index in record.indexes:
+            self.collections.setdefault(index, []).append(record)
+
+class SumHandler(logging.Handler):
+    
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self, level)
+        self.
+
+import logging
+
+try:
+    from statslogger import StatsLogger
+except ImportError:
+    class StatsLogger(logging.Logger):
+        def stats(self, *args, **kwags):
+            pass
+logging.setLoggerClass(StatsLogger)
+
+log = logging.getLogger("fans")
+log.stats(("britney", "a britney song"), index=fan_age/10)
+
+import statzlogger as szl
+
+
+
+szl.collection("fans", ("britney", "a britney song"),
+        index=fan_age/10)
+szl.sum("divafans", 1, index="britney")
+szl.sum("sales", 0.25, index=1)
+szl.sum("sales.hourly", "
