@@ -66,6 +66,11 @@ class SumTests(unittest.TestCase):
         obj.emitvalue(1, "index")
         self.assertEqual(obj.indices, {"index": 1})
 
+    def test_emitvalue_with_default(self):
+        obj = self.init(default=10)
+        obj.emitvalue(1, "index")
+        self.assertEqual(obj.indices, {"index": 11})
+
 class CollectionTests(unittest.TestCase):
 
     def cls(self):
