@@ -13,6 +13,17 @@ log = logging.getLogger("statzlogger")
 log.addHandler(NullHandler())
 
 class StatzHandler(logging.Handler):
+    """A basic handler to receive statistics in the form of LogRecords.
+
+    The StatzHandler knows how to index and aggregate LogRecords. Various
+    subclasses may aggregate records differently, but they all maintain a
+    *indices* attribute. *indices* is a dictionary with keys accumulated during
+    a logging run; its values are the logged data aggregated by index.
+
+    These handlers rely on extra information supplied when a LogRecord is
+    created (see :meth:`getvalue`). Instantiation of a StatzHandler is no
+    different from that of a normal Handler.
+    """
 
     def __init__(self, level=logging.NOTSET):
         logging.Handler.__init__(self, level=level)
