@@ -8,3 +8,6 @@ class CollectionTests(unittest.TestCase):
     
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
+
+if __name__ == "__main__":
+    unittest.main()
