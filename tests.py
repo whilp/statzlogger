@@ -1,5 +1,12 @@
 import unittest
 
+class FakeRecord(object):
+
+    def __init__(self, msg, extra={}):
+        self.msg = msg
+        for k, v in extra.items():
+            setattr(self, k, v)
+
 class CollectionTests(unittest.TestCase):
 
     def cls(self):
