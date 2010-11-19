@@ -47,6 +47,12 @@ class StatzHandlerTests(unittest.TestCase):
         indices = obj.getindices(record)
         self.assertEqual(indices, [None])
 
+    def test_getvalue(self):
+        obj = self.init()
+        record = FakeRecord("value")
+        value = obj.getvalue(record)
+        self.assertEqual(record.msg, value)
+
     def test_emitvalue(self):
         obj = self.init()
         obj.emitvalue("value", "index")
@@ -88,6 +94,12 @@ class CollectionTests(unittest.TestCase):
     
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
+
+    def test_getvalue(self):
+        obj = self.init()
+        record = FakeRecord(1)
+        value = obj.getvalue(record)
+        self.assertEqual(value, [1])
 
     def test_emitvalue(self):
         obj = self.init()
