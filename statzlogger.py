@@ -10,7 +10,12 @@ except AttributeError:
 log = logging.getLogger("statzlogger")
 log.addHandler(NullHandler())
 
-class Collection(logging.Handler):
+class StatzHandler(logging.Handler):
+
+    def emit(self, record):
+        pass
+
+class Collection(StatzHandler):
 
     def __init__(self, level=logging.NOTSET):
         logging.Handler.__init__(self, level)
@@ -19,8 +24,8 @@ class Collection(logging.Handler):
     def emit(self, record):
         log.debug("Got record: %s", record)
 
-class Sum(logging.Handler):
+class Sum(StatzHandler):
     pass
 
-class Top(logging.Handler):
+class Top(StatzHandler):
     pass
