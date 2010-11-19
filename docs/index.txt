@@ -24,7 +24,9 @@ So, this is :mod:`statzlogger`: a set of custom handler implementations that let
 you aggregate statistics while your application runs. :mod:`statzlogger` takes
 advantage of :mod:`logging`'s thread management and propagation and borrows its
 interface. You can call :func:`logging.debug` with a few extra parameters in its
-*extra* keyword argument and :mod:`statzlogger` takes care of the rest.
+*extra* keyword argument and :mod:`statzlogger` takes care of the rest. Use it
+to track the number of requests your webapp serves; to count the number of
+unique words in a file; or to track the slowest queries to your database.
 
 Why 'statzlogger'?
 ------------------
