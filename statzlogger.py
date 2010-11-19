@@ -77,7 +77,6 @@ class Maximum(Collection):
 
     def emitvalue(self, value, index):
         StatzHandler.emitvalue(self, value, index)
-        self.indices[index] = 
         self.indices[index] = sorted(self.indices[index], key=0)
 
 class Top(StatzHandler):
