@@ -35,16 +35,17 @@ if szl is not None:
     salesperhour.addHandler(szl.Sum())
     top100songs.addHandler(szl.Top(100))
 
-numdivafans.debug(1, index="britney")
+numdivafans.debug(1, extra=dict(index="britney"))
 
-sales.debug(0.25, index=1)
+sales.debug(0.25, extra=dict(index=1))
 
 fan_age = 13
-fileoffans.debug(("britney", "a britney song"), index=fan_age / 10)
+fileoffans.debug(("britney", "a britney song"),
+        extra=dict(index=fan_age / 10))
 
 now = time.time()
 hour = now - (now % 3600)
 salesperhour.debug({"count": 1, "sales": 11.99}, 
-        indexes=("britney", "John Q. Salesguy", hour))
+        extra=dict(indexes=("britney", "John Q. Salesguy", hour)))
 
-top100songs.debug("a song", weight=1)
+top100songs.debug("a song", extra=dict(weight=1))
