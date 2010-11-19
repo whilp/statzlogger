@@ -52,6 +52,9 @@ class StatzHandlerTests(unittest.TestCase):
         obj.emitvalue("value", "index")
         self.assertEqual(obj.indices["index"], "value")
 
+        obj.emitvalue("otherval", "index")
+        self.assertEqual(obj.indices["index"], "otherval")
+
 class SumTests(unittest.TestCase):
 
     def cls(self):
@@ -66,10 +69,16 @@ class SumTests(unittest.TestCase):
         obj.emitvalue(1, "index")
         self.assertEqual(obj.indices, {"index": 1})
 
+        obj.emitvalue(2, "index")
+        self.assertEqual(obj.indices, {"index": 3})
+
     def test_emitvalue_with_default(self):
         obj = self.init(default=10)
         obj.emitvalue(1, "index")
         self.assertEqual(obj.indices, {"index": 11})
+
+        obj.emitvalue(1, "index")
+        self.assertEqual(obj.indices, {"index": 12})
 
 class CollectionTests(unittest.TestCase):
 
