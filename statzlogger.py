@@ -1,4 +1,5 @@
 import logging
+import operator
 
 try:
     NullHandler = logging.NullHandler
@@ -64,20 +65,24 @@ class Collection(Sum):
 
 class Maximum(Collection):
 
-    def __init__(self, level=logging.NOTSET, size=None, weight=1):
+    def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=True):
         Collection.__init__(self, level, default=[])
         self.size = size
         self.weight = weight
+        self.reverse = reverse
 
     def getvalue(self, record):
+        (value,) = Collection.getvalue(self, record)
         weight = getattr(record, "weight", self.weight)
         if callable(weight):
-            weight = weight(record)
-        return (record.msg, weight)
+            weight = weight(value)
+        return [(value, weight)]
 
     def emitvalue(self, value, index):
-        StatzHandler.emitvalue(self, value, index)
-        self.indices[index] = sorted(self.indices[index], key=0)
+        Collection.emitvalue(self, value, index)
+        self.indices[index] = sorted(self.indices[index],
+                key=operator.itemgetter(1), 
+                reverse=self.reverse)[:self.size]
 
 class Top(StatzHandler):
     pass

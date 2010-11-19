@@ -109,5 +109,44 @@ class CollectionTests(unittest.TestCase):
         obj.emitvalue([1], "index")
         self.assertEqual(obj.indices, {"index": [1, 1]})
 
+class MaximumTests(unittest.TestCase):
+
+    def cls(self):
+        from statzlogger import Maximum as cls
+        return cls
+    
+    def init(self, *args, **kwargs):
+        return self.cls()(*args, **kwargs)
+
+    def test_getvalue(self):
+        obj = self.init()
+        record = FakeRecord("value")
+        value = obj.getvalue(record)
+        self.assertEqual(value, [("value", 1)])
+
+    def test_getvalue_weighted(self):
+        obj = self.init()
+        record = FakeRecord("value", extra=dict(weight=10))
+        value = obj.getvalue(record)
+        self.assertEqual(value, [("value", 10)])
+
+    def test_emitvalue(self):
+        obj = self.init()
+        obj.emitvalue([("value", 1)], "index")
+        self.assertEqual(obj.indices["index"], [("value", 1)])
+
+        obj.emitvalue([("value", 2)], "index")
+        self.assertEqual(len(obj.indices), 1)
+        self.assertEqual(obj.indices["index"][0], ("value", 2))
+
+    def test_emitvalue_size(self):
+        obj = self.init(size=3)
+        for i in range(5):
+            obj.emitvalue([("value%d" % i, i)], "index")
+
+        self.assertEqual(len(obj.indices["index"]), 3)
+        self.assertEqual(obj.indices["index"][0], ("value4", 4))
+        self.assertEqual(obj.indices["index"][-1], ("value2", 2))
+
 if __name__ == "__main__":
     unittest.main()
