@@ -17,7 +17,24 @@ class StatzHandler(logging.Handler):
         self.indices = {}
 
     def emit(self, record):
-        pass
+        indices = getattr(record, "indices", [])
+        indices.append(getattr(record, "index", None))
+
+        for index in indices:
+            value = record.msg
+            if isinstance(value, type({})):
+                self.emitdictlike(value, index)
+            else:
+                self.emitsimple(value, index)
+
+    def emitvalue(self, value, index):
+        raise NotImplementedError()
+
+    def emitdict(self, value, index):
+        raise NotImplementedError()
+
+    def emittuple(self, value, index):
+        raise NotImplementedError()
 
 class Collection(StatzHandler):
 
@@ -33,18 +50,6 @@ class Sum(StatzHandler):
     def __init__(self, level=logging.NOTSET, start=0):
         StatzHandler.__init__(self, level)
         self.start = start
-
-    def emit(self, record):
-        indices = getattr(record, "indices", [])
-        indices.append(getattr(record, "index", None))
-
-        for index in indices:
-            value = record.msg
-            if isinstance(value, type({})):
-                self.emitdictlike(value, index)
-            else:
-                self.emitsimple(value, index)
-
     def emitsimple(self, value, index):
         self.indices[index] = self.indices.setdefault(index, 0) + value
 
