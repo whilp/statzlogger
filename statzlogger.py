@@ -24,6 +24,12 @@ class StatzHandler(logging.Handler):
     created (see :meth:`getvalue`). Instantiation of a StatzHandler is no
     different from that of a normal Handler.
     """
+    indices = {}
+    """A dictionary of indices.
+
+    :meth:`emit` stores new record values after determining the appropriate
+    index for a record (see :meth:`getindices`).
+    """
 
     def __init__(self, level=logging.NOTSET):
         logging.Handler.__init__(self, level=level)
@@ -47,17 +53,40 @@ class StatzHandler(logging.Handler):
         return indices
 
     def getvalue(self, record):
+        """Return the value of a LogRecord instance.
+
+        If *record* has a *value* attribute, use that. Otherwise, use its *msg*
+        attribute. Note: LogRecords can be given (nearly) arbitrary attributes
+        at creation time by passing the *extra* keyword argument to the logging
+        method. For example::
+
+            >>> logging.debug("a message", extra={"value": "the real value"})
+        """
         return getattr(record, "value", record.msg)
 
     def emit(self, record):
+        """Emit the record.
+
+        Typically, this means aggregating it in one of the handler's indices
+        (under :attr:`indices`).
+        """
         for index in self.getindices(record):
             value = self.getvalue(record)
             self.emitvalue(value, index)
 
     def emitvalue(self, value, index):
+        """Emit a value for a single index."""
         self.indices[index] = value
 
 class Sum(StatzHandler):
+    """The arithmetic sum of the value of each record.
+
+    Doesn't make sense for eg string values, but the implementation won't
+    complain. Parameters:
+
+        * *default* starting value
+        * *op* operator to add values together
+    """
 
     def __init__(self, level=logging.NOTSET, default=0, op=operator.add):
         StatzHandler.__init__(self, level=level)
@@ -69,6 +98,7 @@ class Sum(StatzHandler):
         StatzHandler.emitvalue(self, value, index)
 
 class Collection(Sum):
+    """A collection of records values."""
 
     def __init__(self, level=logging.NOTSET, default=[], op=operator.add):
         Sum.__init__(self, level=level, default=default, op=op)
@@ -77,6 +107,16 @@ class Collection(Sum):
         return [Sum.getvalue(self, record)]
 
 class Maximum(Collection):
+    """Keep only the values with the highest weight.
+
+    In addition to the usual *msg* or *value* attributes, a LogRecord may set a
+    *weight* attribute to influence the record's place in the sorted collection.
+    Parameters:
+
+        * *size* maximum size of each index
+        * *weight* default record weight
+        * *reverse* direction in which to sort the collection
+    """
 
     def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=True):
         Collection.__init__(self, level=level, default=[])
@@ -98,11 +138,16 @@ class Maximum(Collection):
                 reverse=self.reverse)[:self.size]
 
 class Minimum(Maximum):
+    """Keep only the values with the lowest weight."""
 
     def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=False):
         Maximum.__init__(self, level=level, size=size, weight=weight, reverse=reverse)
 
 class Set(Collection):
+    """A collection of unique items.
+
+    If any index grows beyond *size* members, the entire index is removed.
+    """
 
     def __init__(self, level=logging.NOTSET, default=set(), size=None, op=set.union):
         Collection.__init__(self, level=level, default=default, op=op)
