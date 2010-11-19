@@ -19,10 +19,14 @@ class Collection(StatzHandler):
 
     def __init__(self, level=logging.NOTSET):
         logging.Handler.__init__(self, level)
-        self.indexes = {}
+        self.indices = {}
 
     def emit(self, record):
-        log.debug("Got record: %s", record)
+        indices = getattr(record, "indices", [])
+        indices.append(getattr(record, "index", None))
+
+        for index in indices:
+            self.indices.setdefault(index, []).append(record)
 
 class Sum(StatzHandler):
     pass
