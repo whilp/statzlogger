@@ -62,5 +62,23 @@ class Collection(Sum):
     def getvalue(self, record):
         return [Sum.getvalue(self, record)]
 
+class Maximum(Collection):
+
+    def __init__(self, level=logging.NOTSET, size=None, weight=1):
+        Collection.__init__(self, level, default=[])
+        self.size = size
+        self.weight = weight
+
+    def getvalue(self, record):
+        weight = getattr(record, "weight", self.weight)
+        if callable(weight):
+            weight = weight(record)
+        return (record.msg, weight)
+
+    def emitvalue(self, value, index):
+        StatzHandler.emitvalue(self, value, index)
+        self.indices[index] = 
+        self.indices[index] = sorted(self.indices[index], key=0)
+
 class Top(StatzHandler):
     pass
