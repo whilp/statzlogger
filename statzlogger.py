@@ -40,7 +40,18 @@ class Sum(StatzHandler):
 
         for index in indices:
             value = record.msg
-            self.indices[index] = self.indices.setdefault(index, 0) + value
+            if isinstance(value, type({})):
+                self.emitdictlike(value, index)
+            else:
+                self.emitsimple(value, index)
+
+    def emitsimple(self, value, index):
+        self.indices[index] = self.indices.setdefault(index, 0) + value
+
+    def emitdictlike(self, value, index):
+        sub = self.indices.setdefault(index, {})
+        for k, v in value.items():
+            sub[k] = sub.setdefault(k, 0) + v
 
 class Top(StatzHandler):
     pass
