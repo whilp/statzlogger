@@ -48,7 +48,8 @@ class Sum(StatzHandler):
         self.default = default
 
     def emitvalue(self, value, index):
-        self.indices[index] = self.indices.setdefault(index, self.default) + value
+        value = self.indices.setdefault(index, self.default) + value
+        StatzHandler.emitvalue(self, value, index)
 
 class Collection(Sum):
 
