@@ -17,8 +17,8 @@ output aggregators would make it easy to track statistics during an application
 run. And these emitters are closely analogous to :class:`logging.Handler`
 instances.
 
-_ sawzall::     http://szl.googlecode.com/svn/doc/sawzall-language.html
-_ blog post::   http://www.aminus.org/blogs/index.php/2010/11/19/logging-statistics
+.. _sawzall:       http://szl.googlecode.com/svn/doc/sawzall-language.html
+.. _blog post:     http://www.aminus.org/blogs/index.php/2010/11/19/logging-statistics
 
 So, this is :mod:`statzlogger`: a set of custom handler implementations that let
 you aggregate statistics while your application runs. :mod:`statzlogger` takes
