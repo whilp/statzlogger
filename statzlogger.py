@@ -2,7 +2,7 @@ import logging
 
 try:
     NullHandler = logging.NullHandler
-except ImportError:
+except AttributeError:
     class NullHandler(logging.Handler):
         def emit(self, record):
             pass
