@@ -3,18 +3,113 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to statzlogger's documentation!
-=======================================
+statzlogger logs statz
+======================
 
-Contents:
+:mod:`statzlogger` was inspired by Google's `sawzall`_ log processing language
+and a `blog post`_. Sawzall is a great idea, but it implements a lot of
+features already available in a higher-level, dynamic language like Python. The
+:mod:`logging.statistics` proposal caused me to connect the dots, and I suddenly
+realized that (as is fairly evident if you read the language description),
+sawzall is both a log processing and log *generating* language. While its input
+processing capabilities are redundant from the Python perspective, sawzall's
+output aggregators would make it easy to track statistics during an application
+run. And these emitters are closely analogous to :class:`logging.Handler`
+instances.
 
-.. toctree::
-   :maxdepth: 2
+_ sawzall::     http://szl.googlecode.com/svn/doc/sawzall-language.html
+_ blog post::   http://www.aminus.org/blogs/index.php/2010/11/19/logging-statistics
 
-Indices and tables
-==================
+So, this is :mod:`statzlogger`: a set of custom handler implementations that let
+you aggregate statistics while your application runs. :mod:`statzlogger` takes
+advantage of :mod:`logging`'s thread management and propagation and borrows its
+interface. You can call :func:`logging.debug` with a few extra parameters in its
+*extra* keyword argument and :mod:`statzlogger` takes care of the rest.
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Why 'statzlogger'?
+------------------
 
+Because I wanted the name to shorten to 'szl' in homage to the source of
+:mod:`statzlogger`'s handler design.
+
+Installing :mod:`statzlogger`
+-----------------------------
+
+.. highlight:: none
+
+You can install the latest stable version of :mod:`statzlogger` using :command:`pip`::
+    
+    $ pip install stacklogger
+
+Public repositories for the project are hosted at `github`_ and `bitbucket`_, so
+you can use either `git`_ or `Mercurial`_ to get a copy of the project's code
+and history::
+    
+    $ hg clone http://bitbucket.org/wcmaier/statzlogger
+    $ git clone git://github.com/wcmaier/statzlogger.git
+
+.. _github:     http://github.com/wcmaier/statzlogger
+.. _bitbucket:  http://bitbucket.org/wcmaier/statzlogger
+.. _git:        http://git-scm.com/
+.. _Mercurial:  http://mercurial.selenic.com/
+
+If you notice a problem with :mod:`statzlogger`, please report it using the
+github `issue tracker`_ (or, if you have a fix, send a `pull request`_).
+
+.. _issue tracker:  http://github.com/wcmaier/statzlogger/issues
+.. _pull request:   http://github.com/wcmaier/statzlogger/pull/new/master
+
+A note about versions
++++++++++++++++++++++
+
+:mod:`statzlogger` is developed along two branches. The first, 'default' (or
+'master' in git) contains new features and possible bugs -- this branch is the
+active development branch. The second, 'stable', contains releases both major
+and minor as well as bugfixes. If you'd like to help improve :mod:`statzlogger`,
+take a look at default/master. Otherwise, stick with stable.
+
+Basic Usage
+-----------
+
+.. highlight:: python
+
+:mod:`statzlogger` is implemented as a set of handlers that are compatible with
+the standard :mod:`logging` module, so you can simply plug the desired handler
+into your application's existing logging configuration. :mod:`statzlogger`
+doesn't *require* a real logging configuration, though, so feel free to skip it.
+
+To use :mod:`statzlogger`, create any number of regular :class:`logging.Logger`
+instances::
+
+    import logging
+    import time
+    import stacklogger as szl
+
+    reqs = logging.getLogger("stats.requests")
+    reqs.addHandler(sql.Collection)
+
+Then, as your application runs, log messages on the *reqs* logger each time you
+serve a request for a URL::
+
+    now = time.time()
+    hour = now - (now % 3600)
+    reqs.debug("/my/app?user=foo", extra=dict(index=hour)
+
+When your application is complete, you'll find the requested URLs indexed by
+hour in the *indices* dictionary on the *reqs* logger::
+
+    import operator
+
+    data = reqs.indices.items()
+    for requests, hour in sorted(data, key=operator.itemgetter(1)):
+        print "%d: %d requests % (hour, len(requests)
+
+:mod:`statzlogger` providers a number of handlers to aggregate your data; see
+below for more information.
+
+API
+---
+
+..automodule:: statzlogger
+    :members:
+    :show-inheritance:
