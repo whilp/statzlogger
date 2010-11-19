@@ -31,52 +31,27 @@ class StatzHandler(logging.Handler):
 
         return indices
 
-    def getvalues(self, record):
-        msg = record.msg
-        values = {}
-
-        if instance(msg, type({})):
-            for k, v in msg.items():
-                yield k, v
-
     def emit(self, record):
         for index in self.getindices(record):
             value = record.msg
-            if isinstance(value, type({})):
-                self.emitdictlike(value, index)
-            else:
-                self.emitsimple(value, index)
+            self.emitvalue(value, index)
 
-    def emitvalue(self, value, index):
-        raise NotImplementedError()
-
-    def emitdict(self, value, index):
-        raise NotImplementedError()
-
-    def emittuple(self, value, index):
+    def emitvalue(self, record, index):
         raise NotImplementedError()
 
 class Collection(StatzHandler):
 
-    def emitsimple(self, value, index):
+    def emitvalue(self, value, index):
         self.indices.setdefault(index, []).append(value)
-
-    def emit(self, record):
-        for index in self.getindices(record):
-            self.emitsimple()
 
 class Sum(StatzHandler):
 
     def __init__(self, level=logging.NOTSET, start=0):
         StatzHandler.__init__(self, level)
         self.start = start
-    def emitsimple(self, value, index):
-        self.indices[index] = self.indices.setdefault(index, 0) + value
 
-    def emitdictlike(self, value, index):
-        sub = self.indices.setdefault(index, {})
-        for k, v in value.items():
-            sub[k] = sub.setdefault(k, 0) + v
+    def emitvalue(self, value, index):
+        self.indices[index] = self.indices.setdefault(index, 0) + value
 
 class Top(StatzHandler):
     pass
