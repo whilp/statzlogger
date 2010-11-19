@@ -148,5 +148,24 @@ class MaximumTests(unittest.TestCase):
         self.assertEqual(obj.indices["index"][0], ("value4", 4))
         self.assertEqual(obj.indices["index"][-1], ("value2", 2))
 
+class MinimumTests(unittest.TestCase):
+
+    def cls(self):
+        from statzlogger import Minimum as cls
+        return cls
+    
+    def init(self, *args, **kwargs):
+        return self.cls()(*args, **kwargs)
+
+    def test_emitvalue(self):
+        obj = self.init()
+
+        obj.emitvalue([("value1", 1)], "index")
+        self.assertEqual(obj.indices["index"], [("value1", 1)])
+
+        obj.emitvalue([("value2", 2)], "index")
+        self.assertEqual(len(obj.indices["index"]), 2)
+        self.assertEqual(obj.indices["index"][0], ("value1", 1))
+
 if __name__ == "__main__":
     unittest.main()

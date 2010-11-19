@@ -84,5 +84,10 @@ class Maximum(Collection):
                 key=operator.itemgetter(1), 
                 reverse=self.reverse)[:self.size]
 
+class Minimum(Maximum):
+
+    def __init__(self, level=logging.NOTSET, size=None, weight=1, reverse=False):
+        Maximum.__init__(self, level=level, size=size, weight=weight, reverse=reverse)
+
 class Top(StatzHandler):
     pass
