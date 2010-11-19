@@ -47,6 +47,13 @@ class StatzHandlerTests(unittest.TestCase):
         indices = obj.getindices(record)
         self.assertEqual(indices, [None])
 
+    def test_getvalue_value(self):
+        obj = self.init()
+        record = FakeRecord("wrongvalue",
+                extra=dict(value="rightvalue"))
+        value = obj.getvalue(record)
+        self.assertEqual(value, "rightvalue")
+
     def test_getvalue_str(self):
         obj = self.init()
         record = FakeRecord("value")

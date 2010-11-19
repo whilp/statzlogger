@@ -36,7 +36,7 @@ class StatzHandler(logging.Handler):
         return indices
 
     def getvalue(self, record):
-        return record.msg
+        return getattr(record, "value", record.msg)
 
     def emit(self, record):
         for index in self.getindices(record):
