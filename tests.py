@@ -91,10 +91,10 @@ class CollectionTests(unittest.TestCase):
 
     def test_emitvalue(self):
         obj = self.init()
-        obj.emitvalue(1, "index")
+        obj.emitvalue([1], "index")
         self.assertEqual(obj.indices, {"index": [1]})
 
-        obj.emitvalue(1, "index")
+        obj.emitvalue([1], "index")
         self.assertEqual(obj.indices, {"index": [1, 1]})
 
 if __name__ == "__main__":
