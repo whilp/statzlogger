@@ -61,6 +61,11 @@ class SumTests(unittest.TestCase):
     def init(self, *args, **kwargs):
         return self.cls()(*args, **kwargs)
 
+    def test_emitvalue(self):
+        obj = self.init()
+        obj.emitvalue(1, "index")
+        self.assertEqual(obj.indices, {"index": 1})
+
 class CollectionTests(unittest.TestCase):
 
     def cls(self):
