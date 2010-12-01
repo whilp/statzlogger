@@ -104,7 +104,7 @@ hour in the *indices* dictionary on the *reqs* logger::
 
     import operator
 
-    data = reqs.indices.items()
+    data = reqs.handlers[0].indices.items()
     for requests, hour in sorted(data, key=operator.itemgetter(1)):
         print "%d: %d requests % (hour, len(requests)
 
