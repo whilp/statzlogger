@@ -90,7 +90,7 @@ instances::
     reqs = logging.getLogger("stats.requests")
     reqs.addHandler(sql.Collection())
 
-Note: it's a good idea cluster all of your :mod:`statzlogger` loggers in a
+Note: it's a good idea to cluster all of your :mod:`statzlogger` loggers in a
 single namespace. Then, you can control their output via a single instance,
 turning them on or off as necessary. To track stuff, log messages on the *reqs*
 logger each time your application serves a request for a URL::
